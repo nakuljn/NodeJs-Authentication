@@ -108,10 +108,10 @@ module.exports = function(passport) {
 
     },
     function(token, refreshToken, profile, done) {
-        console.log(profile);
+        
 
         process.nextTick(function() {
-
+            console.log(profile);
             // try to find the user based on their google id
             User.findOne({ 'google.id' : profile.id }, function(err, user) {
                 if (err)

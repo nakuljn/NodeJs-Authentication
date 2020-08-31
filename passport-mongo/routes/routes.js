@@ -32,6 +32,44 @@ module.exports = function(app, passport) {
       });
   });
 
+  app.get('/forgot', (req, res, next) => {
+  res.setHeader('Content-type', 'text/html');
+  res.end(templates.layout(`
+    ${templates.error(req.flash())}
+    ${templates.forgotPassword()}
+  `));
+});
+
+app.post('/forgot', async (req, res, next) => {
+  const token = (await promisify(crypto.randomBytes)(20)).toString('hex');
+  const user = users.find(u => u.email === req.body.email);
+
+  if (!user) {
+    req.flash('error', 'No account with that email address exists.');
+    return res.redirect('/forgot');
+  }
+
+  user.resetPasswordToken = token;
+  user.resetPasswordExpires = Date.now() + 3600000;
+
+  const resetEmail = {
+    to: user.email,
+    from: 'passwordreset@example.com',
+    subject: 'Node.js Password Reset',
+    text: `
+      You are receiving this because you (or someone else) have requested the reset of the password for your account.
+      Please click on the following link, or paste this into your browser to complete the process:
+      http://${req.headers.host}/reset/${token}
+      If you did not request this, please ignore this email and your password will remain unchanged.
+    `,
+  };
+
+  await transport.sendMail(resetEmail);
+  req.flash('info', `An e-mail has been sent to ${user.email} with further instructions.`);
+
+  res.redirect('/forgot');
+});
+
   app.get('/forgot', function(req, res) {
     res.render('forgot.ejs', {
       user: req.user,
@@ -67,7 +105,7 @@ module.exports = function(app, passport) {
           service: 'SendGrid',
           auth: {
             user: 'apikey',
-            pass: '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'
+            pass: process.env.passkey
           }
         });
         var mailOptions = {
@@ -127,7 +165,7 @@ module.exports = function(app, passport) {
           service: 'SendGrid',
           auth: {
             user: 'apikey',
-            pass: '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'
+            pass: process.env.passkey
           }
         });
         var mailOptions = {

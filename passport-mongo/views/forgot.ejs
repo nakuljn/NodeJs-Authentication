@@ -12,24 +12,19 @@
 
 <div class="col-sm-6 col-sm-offset-3">
 
-    <h1><span class="fa fa-sign-in"></span>Reset Password</h1>
+    <h1><span class="fa fa-sign-in"></span>Forgot Password</h1>
 
-    <!-- show any messages that come back with authentication -->
     <% if (message.length > 0) { %>
         <div class="alert alert-danger"><%= message %></div>
     <% } %>
 
-    <!-- LOGIN FORM -->
-    <form action="/reset" method="post">
-        <div class="form-group">
-            <label>New Password</label>
-            <input type="password" class="form-control" name="newPassword">
-        </div>
-        <div class="form-group">
-            <label>Confirm Password</label>
-            <input type="password" class="form-control" name="newPassword1">
-        </div>
 
+    <!-- LOGIN FORM -->
+    <form action="/forgot" method="post">
+        <div class="form-group">
+            <label>Email</label>
+            <input type="text" class="form-control" name="email">
+        </div>
         <button type="submit" class="btn btn-warning btn-lg">submit</button>
     </form>
 

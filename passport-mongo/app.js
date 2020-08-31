@@ -10,8 +10,10 @@ var mongoose = require('mongoose');
 var passport = require('passport');
 var flash    = require('connect-flash');
 var session = require('express-session');
-
+var nodemailer = require('nodemailer');
 var routes = require('./routes/routes');
+var crypto = require('crypto');
+var async = require('async');
 // mongoose.connect(dbConfig.url);
 var uri = process.env.MongoDB_URL;
 mongoose.connect(uri, { 

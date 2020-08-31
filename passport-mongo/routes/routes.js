@@ -51,14 +51,6 @@ module.exports = function(app, passport) {
     failureRedirect : '/reset', // redirect back to the reset page if there is an error
     failureFlash : true // allow flash messages
   }));
-  app.get('/auth/google', passport.authenticate('google', { scope : ['profile', 'email'] }));
-
-  // the callback after google has authenticated the user
-  app.get('/auth/google/callback',
-          passport.authenticate('google', {
-                  successRedirect : '/profile',
-                  failureRedirect : '/'
-          }));
 }
 
 function isLoggedIn(req, res, next) {
